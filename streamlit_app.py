@@ -2,7 +2,9 @@
 import streamlit as st
 import requests
 
-API_URL = "http://77.68.97.97:5000"  # Replace with your API's base URL
+load_dotenv()
+
+API_URL = os.getenv("API_BASE_URL") 
 
 def main():
     st.title("Query Your Website")
