@@ -1,7 +1,8 @@
+
 import streamlit as st
 import requests
 
-API_URL = "http://localhost:5000"  # Replace with your API's base URL
+API_URL = "http://77.68.97.97:5000"  # Replace with your API's base URL
 
 def main():
     st.title("API Key and URL Input App")
