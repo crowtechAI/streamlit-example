@@ -8,7 +8,7 @@ API_URL = "http://77.68.97.97:5000"
 def main():
     st.title("Query Your Website")
 
-    api_key = st.text_input("API Key", value='', max_chars=100)
+    api_key = st.text_input("OPENAI API Key", value='', max_chars=100)
     
     
 
@@ -24,7 +24,7 @@ def main():
         else:
             st.error("Please fill in the API Key field before submitting.")
             
-    url = st.text_input("URL", value='', max_chars=1000)
+    url = st.text_input("WEBSITE URL", value='', max_chars=1000)
     
     if st.button("Submit URL"):
         if url:
@@ -39,7 +39,7 @@ def main():
         else:
             st.error("Please fill in the URL field before submitting.")
             
-    question = st.text_input("Question", value='', max_chars=1000)
+    question = st.text_input("ASK YOUR WEBSITE A QUESTION", value='', max_chars=1000)
     
     if st.button("Ask Question"):
         if question:
