@@ -2,9 +2,7 @@ from dotenv import load_dotenv
 import streamlit as st
 import requests
 
-load_dotenv()
-
-API_URL = os.getenv("API_BASE_URL") 
+API_URL
 
 def main():
     st.title("Query Your Website")
