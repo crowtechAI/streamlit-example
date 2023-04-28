@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Website Question Answer API</title>
+    <script>
+        async function askQuestion(event) {
+            event.preventDefault();
+            const questionInput = document.getElementById("question");
+            const question = questionInput.value;
+            const responseElement = document.getElementById("response");
+
+            if (!question) {
+                responseElement.innerText = "Please enter a question";
+                return;
+            }
+
+            const response = await fetch("/api/ask", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({question})
+            });
+
+            if (response.ok) {
+                const jsonResponse = await response.json();
+                responseElement.innerText = jsonResponse.response;
+            } else {
+                responseElement.innerText = "Error: Unable to get an answer";
+            }
+        }
+    </script>
+</head>
+<body>
+    <h1>Website Question Answer API</h1>
+    <form action="/api/add-url" method="POST">
+        <label for="url">Enter a website URL:</label>
+        <input type="url" id="url" name="url" required>
+        <button type="submit">Add URL</button>
+    </form>
+    <form onsubmit="askQuestion(event)">
+        <label for="question">Ask a question:</label>
+        <input type="text" id="question" name="question" required>
+        <button type="submit">Ask</button>
+    </form>
+    <div id="response"></div>
+</body>
+</html>
