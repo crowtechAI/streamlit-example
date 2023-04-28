@@ -7,7 +7,7 @@ API_URL = "http://77.68.97.97:5000"  # Replace with your API's base URL
 def main():
     st.title("API Key and URL Input App")
 
-    api_key = st.text_input("API Key", value='', max_chars=100, type='text')
+    api_key = st.text_input("API Key", value='', max_chars=100)
     url = st.text_input("URL", value='', max_chars=1000)
     question = st.text_input("Question", value='', max_chars=1000)
 
