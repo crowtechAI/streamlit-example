@@ -5,7 +5,7 @@ import requests
 API_URL = "http://77.68.97.97:5000"  # Replace with your API's base URL
 
 def main():
-    st.title("API Key and URL Input App")
+    st.title("Query Your Website")
 
     api_key = st.text_input("API Key", value='', max_chars=100)
     
