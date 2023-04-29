@@ -38,13 +38,12 @@ def main():
                 # Filter out invalid URLs
                 valid_urls = [link for link in scraped_urls if urlparse(link).scheme in ('http', 'https')]
 
-                # Join the URLs in the desired format
-                joined_urls = ", ".join(valid_urls)
 
                 # Update the URL list in the update_loader
                 headers = {"Authorization": f"Bearer {api_key}"}
-                data = {"url": joined_urls}
+                data = {"urls": valid_urls}  # Replace "url" with "urls"
                 response = requests.post(f"{API_URL}/api/update-loader", json=data, headers=headers)
+
 
                 if response.status_code == 200:
                     st.success("URL list submitted successfully.")
