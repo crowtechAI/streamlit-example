@@ -31,11 +31,15 @@ def main():
             response = requests.post(f"{API_URL}/api/update-loader", json=data, headers=headers)
 
             if response.status_code == 200:
-                scraped_urls = response.json().get("scraped_urls", [])
-                st.success("URL submitted successfully.")
-                st.write("Scraped URLs:")
-                for scraped_url in scraped_urls:
-                    st.write(scraped_url)
+                response_data = response.json()
+                if "scraped_urls" in response_data:
+                    scraped_urls = response_data["scraped_urls"]
+                    st.success("URL submitted successfully.")
+                    st.write("Scraped URLs:")
+                    for scraped_url in scraped_urls:
+                        st.write(scraped_url)
+                else:
+                    st.warning("No scraped URLs found.")
             else:
                 st.error("Failed to submit URL.")
         else:
