@@ -8,7 +8,7 @@ API_URL = "http://77.68.97.97:5000"  # Replace with your API's base URL
 def main():
     st.title("Scrape a website and chat to it")
 
-    api_key = st.text_input("OPENAI API Key", value='', max_chars=100)
+    api_key = st.text_input("OPENAI API Key - https://platform.openai.com/account/", value='', max_chars=100)
 
     if st.button("Submit API Key"):
         if api_key:
