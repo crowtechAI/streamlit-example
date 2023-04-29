@@ -28,14 +28,14 @@ def main():
     
     if st.button("Submit URL"):
         if url:
-            headers = {"Authorization": f"Bearer {api_key}"}
-            data = {"url": url}
-            response = requests.post(f"{API_URL}/api/update-loader", json=data, headers=headers)
-
-            if response.status_code == 200:
-                st.success("URL submitted successfully.")
-            else:
-                st.error("Failed to submit URL.")
+            # Scrape and list all URLs
+            try:
+                page_response = requests.get(url)
+                soup = BeautifulSoup(page_response.content, 'lxml')
+                scraped_urls = [link.get('href') for link in soup.find_all('a')]
+                st.write(f"Scraped URLs: {scraped_urls}")
+            except Exception as e:
+                st.error(f"Failed to scrape the URL: {e}")
         else:
             st.error("Please fill in the URL field before submitting.")
             
