@@ -1,6 +1,7 @@
 from dotenv import load_dotenv
 import streamlit as st
 import requests
+from bs4 import BeautifulSoup
 
 API_URL = "http://77.68.97.97:5000" 
 
