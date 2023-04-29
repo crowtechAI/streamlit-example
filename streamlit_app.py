@@ -69,11 +69,11 @@ def main():
             else:
                 error_message = response.json().get("error", "Failed to get a response for the question.")
                 st.error(error_message)
-            else:
-                st.error("Please fill in the Question field before submitting.")
+        else:
+            st.error("Please fill in the Question field before submitting.")
 
-       if name == "main":
-        try:
-          main()
-            except Exception as e:
-               st.error("An error occurred: " + str(e))
+if __name__ == "__main__":
+    try:
+        main()
+    except Exception as e:
+        st.error("An error occurred: " + str(e))
