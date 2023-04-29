@@ -28,32 +28,32 @@ def main():
     url = st.text_input("WEBSITE URL", value='', max_chars=1000)
     
     if st.button("Submit URL"):
-    if url:
-        # Scrape and list all URLs
-        try:
-            page_response = requests.get(url)
-            soup = BeautifulSoup(page_response.content, 'lxml')
-            scraped_urls = [link.get('href') for link in soup.find_all('a')]
+        if url:
+            # Scrape and list all URLs
+            try:
+                page_response = requests.get(url)
+                soup = BeautifulSoup(page_response.content, 'lxml')
+                scraped_urls = [link.get('href') for link in soup.find_all('a')]
 
-            # Filter out invalid URLs
-            valid_urls = [link for link in scraped_urls if urlparse(link).scheme in ('http', 'https')]
+                # Filter out invalid URLs
+                valid_urls = [link for link in scraped_urls if urlparse(link).scheme in ('http', 'https')]
 
-            # Join the URLs in the desired format
-            joined_urls = ", ".join(valid_urls)
+                # Join the URLs in the desired format
+                joined_urls = ", ".join(valid_urls)
 
-            # Update the URL list in the update_loader
-            headers = {"Authorization": f"Bearer {api_key}"}
-            data = {"url": joined_urls}
-            response = requests.post(f"{API_URL}/api/update-loader", json=data, headers=headers)
+                # Update the URL list in the update_loader
+                headers = {"Authorization": f"Bearer {api_key}"}
+                data = {"url": joined_urls}
+                response = requests.post(f"{API_URL}/api/update-loader", json=data, headers=headers)
 
-            if response.status_code == 200:
-                st.success("URL list submitted successfully.")
-            else:
-                st.error("Failed to submit URL list.")
-        except Exception as e:
-            st.error(f"Failed to scrape the URL: {e}")
-    else:
-        st.error("Please fill in the URL field before submitting.")
+                if response.status_code == 200:
+                    st.success("URL list submitted successfully.")
+                else:
+                    st.error("Failed to submit URL list.")
+            except Exception as e:
+                st.error(f"Failed to scrape the URL: {e}")
+        else:
+            st.error("Please fill in the URL field before submitting.")
 
             
     question = st.text_input("ASK YOUR WEBSITE A QUESTION", value='', max_chars=1000)
