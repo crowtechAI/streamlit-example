@@ -1,7 +1,7 @@
-# streamlit_app.py
 from bs4 import BeautifulSoup
 import streamlit as st
 import requests
+import validators
 
 API_URL = "http://77.68.97.97:5000"  # Replace with your API's base URL
 
@@ -18,7 +18,8 @@ def main():
             if response.status_code == 200:
                 st.success("API Key submitted successfully.")
             else:
-                st.error("Failed to submit API Key.")
+                error_message = response.json().get("error", "Failed to submit API Key.")
+                st.error(error_message)
         else:
             st.error("Please fill in the API Key field before submitting.")
             
@@ -26,9 +27,15 @@ def main():
     
     if st.button("Submit URL"):
         if url:
+            if not validators.url(url):
+                st.warning("Please enter a valid URL.")
+                return
+            
             headers = {"Authorization": f"Bearer {api_key}"}
             data = {"url": url}
-            response = requests.post(f"{API_URL}/api/update-loader", json=data, headers=headers)
+            
+            with st.spinner("Scraping URLs..."):
+                response = requests.post(f"{API_URL}/api/update-loader", json=data, headers=headers)
 
             if response.status_code == 200:
                 scraped_urls = response.json().get("scraped_urls", [])
@@ -37,7 +44,8 @@ def main():
                 for scraped_url in scraped_urls:
                     st.write(scraped_url)
             else:
-                st.error("Failed to submit URL.")
+                error_message = response.json().get("error", "Failed to submit URL.")
+                st.error(error_message)
         else:
             st.error("Please fill in the URL field before submitting.")
 
@@ -45,17 +53,27 @@ def main():
     
     if st.button("Ask Question"):
         if question:
+            if not api_key:
+                st.warning("Please enter an API Key before asking a question.")
+                return
+                
             headers = {"Authorization": f"Bearer {api_key}"}
             data = {"question": question}
-            response = requests.post(f"{API_URL}/api/ask", json=data, headers=headers)
+            
+            with st.spinner("Generating response..."):
+                response = requests.post(f"{API_URL}/api/ask", json=data, headers=headers)
 
             if response.status_code == 200:
                 response_data = response.json()
                 st.write(f"Response: {response_data['response']}")
             else:
-                st.error("Failed to get a response for the question.")
-        else:
-            st.error("Please fill in the Question field before submitting.")
+                error_message = response.json().get("error", "Failed to get a response for the question.")
+                st.error(error_message)
+            else:
+                st.error("Please fill in the Question field before submitting.")
 
-if __name__ == "__main__":
-    main()
+       if name == "main":
+        try:
+          main()
+            except Exception as e:
+               st.error("An error occurred: " + str(e))
