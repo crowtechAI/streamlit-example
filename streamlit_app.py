@@ -1,17 +1,14 @@
-from dotenv import load_dotenv
+# streamlit_app.py
+
 import streamlit as st
 import requests
-from bs4 import BeautifulSoup
 
-API_URL = "http://77.68.97.97:5000" 
-
+API_URL = "http://77.68.97.97:5000"  # Replace with your API's base URL
 
 def main():
-    st.title("Query Your Website")
+    st.title("API Key and URL Input App")
 
-    api_key = st.text_input("OPENAI API Key", value='', max_chars=100)
-    
-    
+    api_key = st.text_input("API Key", value='', max_chars=100)
 
     if st.button("Submit API Key"):
         if api_key:
@@ -25,22 +22,22 @@ def main():
         else:
             st.error("Please fill in the API Key field before submitting.")
             
-    url = st.text_input("WEBSITE URL", value='', max_chars=1000)
+    url = st.text_input("URL", value='', max_chars=1000)
     
     if st.button("Submit URL"):
         if url:
-            # Scrape and list all URLs
-            try:
-                page_response = requests.get(url)
-                soup = BeautifulSoup(page_response.content, 'lxml')
-                scraped_urls = [link.get('href') for link in soup.find_all('a')]
-                st.write(f"Scraped URLs: {scraped_urls}")
-            except Exception as e:
-                st.error(f"Failed to scrape the URL: {e}")
+            headers = {"Authorization": f"Bearer {api_key}"}
+            data = {"url": url}
+            response = requests.post(f"{API_URL}/api/update-loader", json=data, headers=headers)
+
+            if response.status_code == 200:
+                st.success("URL submitted successfully.")
+            else:
+                st.error("Failed to submit URL.")
         else:
             st.error("Please fill in the URL field before submitting.")
             
-    question = st.text_input("ASK YOUR WEBSITE A QUESTION", value='', max_chars=1000)
+    question = st.text_input("Question", value='', max_chars=1000)
     
     if st.button("Ask Question"):
         if question:
@@ -56,7 +53,5 @@ def main():
         else:
             st.error("Please fill in the Question field before submitting.")
 
-
-
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
