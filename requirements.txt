@@ -1,6 +1,6 @@
 altair
-pip--23.1.2
 pandas
 streamlit
 python-dotenv
-beautifulsoup4 lxml
+beautifulsoup4
+lxml
