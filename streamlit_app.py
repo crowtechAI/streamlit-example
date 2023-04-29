@@ -31,12 +31,16 @@ def main():
             response = requests.post(f"{API_URL}/api/update-loader", json=data, headers=headers)
 
             if response.status_code == 200:
+                scraped_urls = response.json().get("scraped_urls", [])
                 st.success("URL submitted successfully.")
+                st.write("Scraped URLs:")
+                for scraped_url in scraped_urls:
+                    st.write(scraped_url)
             else:
                 st.error("Failed to submit URL.")
         else:
             st.error("Please fill in the URL field before submitting.")
-            
+
     question = st.text_input("Question", value='', max_chars=1000)
     
     if st.button("Ask Question"):
