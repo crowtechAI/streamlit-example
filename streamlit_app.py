@@ -24,50 +24,50 @@ def main():
             st.error("Please fill in the API Key field before submitting.")
             
     url = st.text_input("URL (Some Websites dont work - I'm working on the problem)", value='', max_chars=1000)
-uploaded_file = st.file_uploader("Choose a PDF file", type="pdf")
+    uploaded_file = st.file_uploader("Choose a PDF file", type="pdf")
 
-if st.button("Submit URL"):
-    if url:
-        if not validators.url(url):
-            st.warning("Please enter a valid URL.")
+    if st.button("Submit URL"):
+        if url:
+            if not validators.url(url):
+                st.warning("Please enter a valid URL.")
+            else:
+                headers = {"Authorization": f"Bearer {api_key}"}
+                data = {"url": url}
+
+                with st.spinner("Scraping URLs..."):
+                    response = requests.post(f"{API_URL}/api/update-loader", data=data, headers=headers)
+
+                if response.status_code == 200:
+                    scraped_urls = response.json().get("scraped_urls", [])
+                    st.success("URL submitted successfully.")
+                    st.write("Scraped URLs:")
+                    for scraped_url in scraped_urls:
+                        st.write(scraped_url)
+                else:
+                    error_message = response.json().get("error", "Failed to submit URL.")
+                    st.error(error_message)
         else:
-            headers = {"Authorization": f"Bearer {api_key}"}
-            data = {"url": url}
+            st.warning("Please enter a URL before submitting.")
 
-            with st.spinner("Scraping URLs..."):
-                response = requests.post(f"{API_URL}/api/update-loader", data=data, headers=headers)
+    if st.button("Upload PDF"):
+        if uploaded_file is not None:
+            headers = {"Authorization": f"Bearer {api_key}"}
+            files = {"pdf": (uploaded_file.name, uploaded_file.getvalue(), "application/pdf")}
+
+            with st.spinner("Uploading PDF..."):
+                response = requests.post(f"{API_URL}/api/update-loader", files=files, headers=headers)
 
             if response.status_code == 200:
                 scraped_urls = response.json().get("scraped_urls", [])
-                st.success("URL submitted successfully.")
+                st.success("PDF uploaded successfully.")
                 st.write("Scraped URLs:")
                 for scraped_url in scraped_urls:
                     st.write(scraped_url)
             else:
-                error_message = response.json().get("error", "Failed to submit URL.")
+                error_message = response.json().get("error", "Failed to upload PDF.")
                 st.error(error_message)
-    else:
-        st.warning("Please enter a URL before submitting.")
-
-if st.button("Upload PDF"):
-    if uploaded_file is not None:
-        headers = {"Authorization": f"Bearer {api_key}"}
-        files = {"pdf": (uploaded_file.name, uploaded_file.getvalue(), "application/pdf")}
-
-        with st.spinner("Uploading PDF..."):
-            response = requests.post(f"{API_URL}/api/update-loader", files=files, headers=headers)
-
-        if response.status_code == 200:
-            scraped_urls = response.json().get("scraped_urls", [])
-            st.success("PDF uploaded successfully.")
-            st.write("Scraped URLs:")
-            for scraped_url in scraped_urls:
-                st.write(scraped_url)
         else:
-            error_message = response.json().get("error", "Failed to upload PDF.")
-            st.error(error_message)
-    else:
-        st.warning("Please choose a PDF file to upload.")
+            st.warning("Please choose a PDF file to upload.")
 
 
     question = st.text_input("Question", value='', max_chars=1000)
