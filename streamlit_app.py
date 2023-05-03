@@ -25,9 +25,7 @@ def main():
         else:
             st.error("Please fill in the API Key field before submitting.")
             
-        url = st.text_input("URL (Some Websites dont work - I'm working on the problem)", value='', max_chars=1000)
-
-        if st.button("Submit URL"):
+    if st.button("Submit URL"):
         if url:
             if not validators.url(url):
                 st.warning("Please enter a valid URL.")
@@ -50,6 +48,7 @@ def main():
                 st.error(error_message)
         else:
             st.error("Please fill in the URL field before submitting.")
+
 
 
     uploaded_file = st.file_uploader("Choose a PDF file", type="pdf")
