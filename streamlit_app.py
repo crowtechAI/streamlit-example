@@ -25,6 +25,7 @@ def main():
         else:
             st.error("Please fill in the API Key field before submitting.")
             
+    url = st.text_input("URL (Some Websites dont work - I'm working on the problem)", value='', max_chars=1000)        
     if st.button("Submit URL"):
         if url:
             if not validators.url(url):
