@@ -25,29 +25,29 @@ def main():
             
     url = st.text_input("URL (Some Websites dont work - I'm working on the problem)", value='', max_chars=1000)
 
-if st.button("Submit URL"):
-    if url:
-        if not validators.url(url):
-            st.warning("Please enter a valid URL.")
-            return
+    if st.button("Submit URL"):
+        if url:
+            if not validators.url(url):
+                st.warning("Please enter a valid URL.")
+                return
 
-        headers = {"Authorization": f"Bearer {api_key}"}
-        data = {"url": url}
+            headers = {"Authorization": f"Bearer {api_key}"}
+            data = {"url": url}
 
-        with st.spinner("Scraping URLs..."):
-            response = requests.post(f"{API_URL}/api/update-loader", data=data, headers=headers)
+            with st.spinner("Scraping URLs..."):
+                response = requests.post(f"{API_URL}/api/update-loader", data=data, headers=headers)
 
-        if response.status_code == 200:
-            scraped_urls = response.json().get("scraped_urls", [])
-            st.success("URL submitted successfully.")
-            st.write("Scraped URLs:")
-            for scraped_url in scraped_urls:
-                st.write(scraped_url)
+            if response.status_code == 200:
+                scraped_urls = response.json().get("scraped_urls", [])
+                st.success("URL submitted successfully.")
+                st.write("Scraped URLs:")
+                for scraped_url in scraped_urls:
+                    st.write(scraped_url)
+            else:
+                error_message = response.json().get("error", "Failed to submit URL.")
+                st.error(error_message)
         else:
-            error_message = response.json().get("error", "Failed to submit URL.")
-            st.error(error_message)
-    else:
-        st.error("Please fill in the URL field before submitting.")
+            st.error("Please fill in the URL field before submitting.")
 
     question = st.text_input("Question", value='', max_chars=1000)
     
