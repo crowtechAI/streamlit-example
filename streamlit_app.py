@@ -23,6 +23,8 @@ def main():
         else:
             st.error("Please fill in the API Key field before submitting.")
             
+    st.title("Choose either a URL to scrape or upload a PDF (depending on the size of the PDF it can take a while)")
+            
     url = st.text_input("URL (Some Websites dont work - I'm working on the problem)", value='', max_chars=1000)
     uploaded_file = st.file_uploader("Choose a PDF file", type="pdf")
 
