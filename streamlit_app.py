@@ -2,7 +2,7 @@ from bs4 import BeautifulSoup
 import streamlit as st
 import requests
 import validators
-import PyPDF2
+from PyPDF2 import PdfReader
 from io import BytesIO
 
 API_URL = "http://77.68.97.97:5000"  # Replace with your API's base URL
@@ -56,7 +56,7 @@ def main():
     if uploaded_file is not None:
         with st.spinner("Uploading PDF..."):
             file_bytes = BytesIO(uploaded_file.getvalue())
-            pdf_reader = PyPDF2.PdfFileReader(file_bytes)
+            pdf_reader = PyPDF2.PdfReader(file_bytes)
 
             pdf_text = []
             for page_num in range(pdf_reader.numPages):
