@@ -23,31 +23,34 @@ def main():
         else:
             st.error("Please fill in the API Key field before submitting.")
             
-    url = st.text_input("URL (Some Websites dont work - I'm working on the problem)", value='', max_chars=1000)
+    uploaded_file = st.file_uploader("Choose a PDF file", type="pdf")
 
-    if st.button("Submit URL"):
-        if url:
-            if not validators.url(url):
-                st.warning("Please enter a valid URL.")
-                return
+    if st.button("Upload PDF"):
+        if uploaded_file is not None:
+            with st.spinner("Uploading PDF..."):
+                file_bytes = BytesIO(uploaded_file.getvalue())
+                pdf_reader = PyPDF2.PdfReader(file_bytes)
 
-            headers = {"Authorization": f"Bearer {api_key}"}
-            data = {"url": url}
+                pdf_text = []
+                for page in pdf_reader.pages:
+                    text = page.extract_text()
+                    pdf_text.append(text)
 
-            with st.spinner("Scraping URLs..."):
-                response = requests.post(f"{API_URL}/api/update-loader", data=data, headers=headers)
+                pdf_content = " ".join(pdf_text)
 
-            if response.status_code == 200:
-                scraped_urls = response.json().get("scraped_urls", [])
-                st.success("URL submitted successfully.")
-                st.write("Scraped URLs:")
-                for scraped_url in scraped_urls:
-                    st.write(scraped_url)
-            else:
-                error_message = response.json().get("error", "Failed to submit URL.")
-                st.error(error_message)
+                headers = {"Authorization": f"Bearer {api_key}"}
+                data = {"text": pdf_content}
+
+                response = requests.post(f"{API_URL}/api/update-loader", json=data, headers=headers)
+
+                if response.status_code == 200:
+                    st.success("PDF uploaded successfully.")
+                else:
+                    error_message = response.json().get("error", "Failed to upload PDF.")
+                    st.error(error_message)
         else:
-            st.error("Please fill in the URL field before submitting.")
+            st.warning("Please choose a PDF file to upload.")
+
 
     question = st.text_input("Question", value='', max_chars=1000)
     
