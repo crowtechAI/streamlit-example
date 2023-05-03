@@ -54,29 +54,30 @@ def main():
 
     uploaded_file = st.file_uploader("Choose a PDF file", type="pdf")
 
-    if uploaded_file is not None:
-        with st.spinner("Uploading PDF..."):
-            file_bytes = BytesIO(uploaded_file.getvalue())
-            pdf_reader = PyPDF2.PdfReader(file_bytes)
+if uploaded_file is not None:
+    with st.spinner("Uploading PDF..."):
+        file_bytes = BytesIO(uploaded_file.getvalue())
+        pdf_reader = PyPDF2.PdfFileReader(file_bytes)
 
-            pdf_text = []
-            for page_num in range(pdf_reader.numPages):
-                page = pdf_reader.getPage(page_num)
-                text = page.extractText()
-                pdf_text.append(text)
+        pdf_text = []
+        for page_num in range(len(pdf_reader.pages)):
+            page = pdf_reader.getPage(page_num)
+            text = page.extractText()
+            pdf_text.append(text)
 
-            pdf_content = " ".join(pdf_text)
+        pdf_content = " ".join(pdf_text)
 
-            headers = {"Authorization": f"Bearer {api_key}"}
-            data = {"text": pdf_content}
+        headers = {"Authorization": f"Bearer {api_key}"}
+        data = {"text": pdf_content}
 
-            response = requests.post(f"{API_URL}/api/update-loader", json=data, headers=headers)
+        response = requests.post(f"{API_URL}/api/update-loader", json=data, headers=headers)
 
-            if response.status_code == 200:
-                st.success("PDF uploaded successfully.")
-            else:
-                error_message = response.json().get("error", "Failed to upload PDF.")
-                st.error(error_message)
+        if response.status_code == 200:
+            st.success("PDF uploaded successfully.")
+        else:
+            error_message = response.json().get("error", "Failed to upload PDF.")
+            st.error(error_message)
+
 
     question = st.text_input("Question", value='', max_chars=1000)
     
