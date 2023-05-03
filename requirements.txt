@@ -4,4 +4,4 @@ streamlit
 python-dotenv
 beautifulsoup4
 lxml
-PyPDF2~=2.0
+PyPDF2
