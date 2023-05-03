@@ -2,6 +2,7 @@ from bs4 import BeautifulSoup
 import streamlit as st
 import requests
 import validators
+import PyPDF2
 from PyPDF2 import PdfReader
 from io import BytesIO
 
